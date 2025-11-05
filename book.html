@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book · My Library</title>
+
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#111111">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Fonts similar to the reference: elegant serif for titles + clean sans for text -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --fg:#0b0b0b;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --accent:#e11d48; /* red accent like the reference tag */
+      --max: 860px;     /* readable width */
+    }
+
+    html,body{background:var(--bg); color:var(--fg); margin:0;}
+    body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height:1.7;}
+
+    /* Top masthead */
+    .mast{
+      padding:22px 16px;
+      border-bottom:1px solid var(--border);
+      position:sticky; top:0; background:rgba(255,255,255,.9); backdrop-filter:blur(6px);
+    }
+    .brand{font-family:"Playfair Display", serif; font-weight:700; letter-spacing:.04em; font-size:1.25rem;}
+    .brand a{color:inherit; text-decoration:none;}
+    .back{font-size:.9rem; color:var(--muted); text-decoration:none;}
+    .wrap{max-width:var(--max); margin:0 auto;}
+
+    /* Article header */
+    .kicker{color:var(--accent); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.82rem; margin-top:18px; margin-bottom:8px;}
+    h1.title{
+      font-family:"Playfair Display", serif;
+      font-weight:700; line-height:1.15;
+      font-size:clamp(1.8rem, 3.6vw + 1rem, 3rem);
+      margin:6px 0 8px;
+    }
+    .submeta{color:var(--muted); font-size:.95rem; margin-bottom:18px;}
+    .rule{height:1px; background:var(--border); margin:18px 0;}
+
+    /* Hero image */
+    .hero{
+      display:flex; justify-content:center; margin:20px 0 8px;
+    }
+    .hero img{
+      width:100%; max-width:720px;
+      height:auto; border-radius:12px;
+      display:block; box-shadow:0 6px 22px rgba(0,0,0,.08);
+    }
+
+    /* Body text */
+    .content{
+      margin-top:14px; font-size:1.06rem;
+    }
+    .content p{margin:0 0 1.05rem;}
+    .lede{font-weight:500;}
+
+    /* Responsive spacing */
+    main{padding:10px 16px 56px;}
+    @media (min-width: 980px){
+      main{padding:20px 24px 72px;}
+    }
+
+    /* Buttons */
+    .actions{display:flex; gap:10px; margin:22px 0 8px; flex-wrap:wrap;}
+    .btn{
+      display:inline-block; border:1px solid var(--border); padding:10px 14px;
+      border-radius:10px; text-decoration:none; color:var(--fg); font-weight:600;
+    }
+    .btn.primary{background:var(--accent); color:#fff; border-color:var(--accent);}
+  </style>
+</head>
+<body>
+  <header class="mast">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <a class="back" href="/index.html">← Back to Library</a>
+      <div class="brand"><a href="/index.html">My Library</a></div>
+    </div>
+  </header>
+
+  <main>
+    <article class="wrap">
+      <div class="kicker">Book</div>
+      <h1 class="title" id="book-title">Book Title</h1>
+      <div class="submeta" id="book-meta">by <strong id="book-author">Author Name</strong> · <span id="book-date">2025</span></div>
+      <div class="rule"></div>
+
+      <figure class="hero">
+        <!-- Placeholder image; replace with your own asset when ready -->
+        <img id="book-image" src="https://picsum.photos/1200/675?random=7" alt="Book cover placeholder">
+      </figure>
+
+      <section class="content" id="book-desc">
+        <p class="lede">
+          Full description / synopsis goes here. Keep it short and inviting, like the reference layout.
+        </p>
+        <p>
+          We’ll wire this to real data in the next step (JSON file per book or a single books.json).
+          For now it’s populated from a small inline map using the <code>?b=</code> slug.
+        </p>
+      </section>
+
+      <div class="actions">
+        <a class="btn primary" id="read-btn" href="#">Start Reading</a>
+        <a class="btn" href="/index.html">Browse more books</a>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    // Very small client-side router usi
