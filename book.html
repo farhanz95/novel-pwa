@@ -112,6 +112,30 @@
 
       <div class="actions">
         <a class="btn primary" id="read-btn" href="#">Start Reading</a>
+
+        <section id="reading" style="display:none; margin-top:18px">
+          <div class="rule"></div>
+          <h2 style="font-family:'Playfair Display',serif; margin:14px 0 8px;">Chapter 1 · Opening</h2>
+        
+          <!-- Image -->
+          <figure style="margin:0 0 14px;">
+            <img id="img1" src="" alt="Chapter image" style="width:100%; max-width:720px; height:auto; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);" />
+          </figure>
+        
+          <!-- Short video (auto-plays muted on mobile) -->
+          <figure style="margin:0 0 14px;">
+            <video id="vid1" muted playsinline autoplay loop controls
+                   style="width:100%; max-width:720px; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);">
+              Your browser does not support the video tag.
+            </video>
+          </figure>
+        
+          <!-- GIF -->
+          <figure style="margin:0;">
+            <img id="gif1" src="" alt="Chapter gif" style="width:100%; max-width:720px; height:auto; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);" />
+          </figure>
+        </section>
+
         <a class="btn" href="/index.html">Browse more books</a>
       </div>
     </article>
@@ -174,6 +198,59 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
     }
+
+    const BOOKS = {
+      "river-of-stars": {
+        title: "River of Stars",
+        author: "A. K. Farhan",
+        year: "2025",
+        image: "https://picsum.photos/1200/675?random=11",
+        desc: [
+          "A night-crossing over a silent city where the river remembers every secret.",
+          "When tides turn and memories surface, a courier must decide which truth is worth delivering."
+        ],
+        media: {
+          imageId: "1AAAABBBBCCCCDDDDEEEEFFFF11112222", // replace with your own
+          videoId: "1FFFFEEEEDDDDCCCCBBBBAAAA33334444", // 8s mp4 on Drive
+          gifId:   "1ZZZZYYYYXXXXWWWWVVVVUUUU55556666"  // .gif on Drive
+        }
+      }
+    };
+
+    // Build direct file URLs from Google Drive IDs
+    const gView = id => `https://drive.google.com/uc?export=view&id=$1PUOVfAFzdSy_1Jz-DxVfcjDpu-ReRLda`;       // images
+    // const gView = id => `https://drive.google.com/uc?export=view&id=$1tFAMcg9MQEoGC8803_eXz8JDQiSHUALY`;       // gifs
+    const gDown = id => `https://drive.google.com/uc?export=download&id=$1Ly_Fda49xzT5LIhfHPQxHAHERydPTm7y`;   // good for <video src>
+    
+    // Fill media when "Start Reading" is clicked
+    const reading = document.getElementById('reading');
+    const btn = document.getElementById('read-btn');
+    
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+    
+      // Put sources
+      if (book.media?.imageId) document.getElementById('img1').src = gView(book.media.imageId);
+      if (book.media?.gifId)   document.getElementById('gif1').src = gView(book.media.gifId);
+    
+      if (book.media?.videoId) {
+        const vid = document.getElementById('vid1');
+        vid.src = gDown(book.media.videoId); // direct stream
+        vid.load();
+        // try to play immediately (works on mobile because it's muted + user just clicked)
+        const tryPlay = vid.play();
+        if (tryPlay && typeof tryPlay.catch === 'function') {
+          tryPlay.catch(() => {/* ignore autoplay block; controls are visible anyway */});
+        }
+      }
+    
+      // Reveal section
+      reading.style.display = 'block';
+      // Optional: scroll into view smoothly
+      reading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+
   </script>
 </body>
 </html>
