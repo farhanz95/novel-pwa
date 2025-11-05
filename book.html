@@ -153,9 +153,9 @@
           "When tides turn and memories surface, a courier must decide which truth is worth delivering."
         ],
         media: {
-          imageId: "1PUOVfAFzdSy_1Jz-DxVfcjDpu-ReRLda", // replace with your own
-          videoId: "1usj9gaN2ZLkzPjLCbJMKkhirdHJhLO3u", // 8s mp4 on Drive
-          gifId:   "1tFAMcg9MQEoGC8803_eXz8JDQiSHUALY"  // .gif on Drive
+            image: "/novel-pwa/media/image1.jpg",
+            video: "/novel-pwa/media/clip.mp4",
+            gif:   "/novel-pwa/media/anim.gif"
         }
       },
       "glass-garden": {
@@ -219,29 +219,14 @@
     btn.addEventListener('click', (e) => {
       e.preventDefault();
     
-      // images/gifs → prefer direct download; fallback to view
-      if (book.media?.imageId) {
-        setSrcWithFallback(
-          document.getElementById('img1'),
-          gDown(book.media.imageId),
-          gView(book.media.imageId)
-        );
-      }
-      if (book.media?.gifId) {
-        setSrcWithFallback(
-          document.getElementById('gif1'),
-          gDown(book.media.gifId),
-          gView(book.media.gifId)
-        );
-      }
+      if (book.media?.image) document.getElementById('img1').src = book.media.image;
+      if (book.media?.gif)   document.getElementById('gif1').src = book.media.gif;
     
-      // video → use direct download for streaming
-      if (book.media?.videoId) {
+      if (book.media?.video) {
         const vid = document.getElementById('vid1');
-        vid.src = gDown(book.media.videoId) + `&cb=${Date.now()}`;
+        vid.src = book.media.video + `?cb=${Date.now()}`; // bust cache
         vid.load();
-        const p = vid.play();
-        if (p && p.catch) p.catch(()=>{ /* ignore if browser delays autoplay */ });
+        const p = vid.play(); if (p && p.catch) p.catch(()=>{});
       }
     
       reading.style.display = 'block';
