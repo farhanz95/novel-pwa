@@ -156,7 +156,12 @@
         desc: [
           "A night-crossing over a silent city where the river remembers every secret.",
           "When tides turn and memories surface, a courier must decide which truth is worth delivering."
-        ]
+        ],
+        media: {
+          imageId: "1PUOVfAFzdSy_1Jz-DxVfcjDpu-ReRLda", // replace with your own
+          videoId: "$1Ly_Fda49xzT5LIhfHPQxHAHERydPTm7y", // 8s mp4 on Drive
+          gifId:   "1tFAMcg9MQEoGC8803_eXz8JDQiSHUALY"  // .gif on Drive
+        }
       },
       "glass-garden": {
         title: "The Glass Garden",
@@ -198,24 +203,6 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
     }
-
-    const BOOKS = {
-      "river-of-stars": {
-        title: "River of Stars",
-        author: "A. K. Farhan",
-        year: "2025",
-        image: "https://picsum.photos/1200/675?random=11",
-        desc: [
-          "A night-crossing over a silent city where the river remembers every secret.",
-          "When tides turn and memories surface, a courier must decide which truth is worth delivering."
-        ],
-        media: {
-          imageId: "1PUOVfAFzdSy_1Jz-DxVfcjDpu-ReRLda", // replace with your own
-          videoId: "$1Ly_Fda49xzT5LIhfHPQxHAHERydPTm7y", // 8s mp4 on Drive
-          gifId:   "1tFAMcg9MQEoGC8803_eXz8JDQiSHUALY"  // .gif on Drive
-        }
-      }
-    };
 
     // Build direct file URLs from Google Drive IDs
     const gView = id => `https://drive.google.com/uc?export=view&id=${id}`;       // good for images/gifs
