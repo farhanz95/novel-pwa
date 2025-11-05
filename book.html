@@ -120,22 +120,17 @@
         <h2 style="font-family:'Playfair Display',serif; margin:14px 0 8px;">Chapter 1 · Opening</h2>
       
         <!-- Image -->
-        <figure style="margin:0 0 14px;">
-          <img id="img1" src="" alt="Chapter image" style="width:100%; max-width:720px; height:auto; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);" />
-        </figure>
-      
+        <img id="img1" src="" alt="Chapter image" referrerpolicy="no-referrer"
+        style="width:100%; max-width:720px; height:auto; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);" />
+        
         <!-- Short video (auto-plays muted on mobile) -->
-        <figure style="margin:0 0 14px;">
-          <video id="vid1" muted playsinline autoplay loop controls
-                 style="width:100%; max-width:720px; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);">
-            Your browser does not support the video tag.
-          </video>
-        </figure>
-      
+        <video id="vid1" muted playsinline autoplay loop controls referrerpolicy="no-referrer"
+        style="width:100%; max-width:720px; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);">
+        
         <!-- GIF -->
-        <figure style="margin:0;">
-          <img id="gif1" src="" alt="Chapter gif" style="width:100%; max-width:720px; height:auto; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);" />
-        </figure>
+        <img id="gif1" src="" alt="Chapter gif" referrerpolicy="no-referrer"
+        style="width:100%; max-width:720px; height:auto; border-radius:12px; box-shadow:0 6px 22px rgba(0,0,0,.08);" />
+
       </section>
       
     </article>
@@ -204,37 +199,54 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
     }
 
-    // Build direct file URLs from Google Drive IDs
-    const gView = id => `https://drive.google.com/uc?export=view&id=${id}`;       // good for images/gifs
-    const gDown = id => `https://drive.google.com/uc?export=download&id=${id}`;   // good for <video src>
+    // 1) Use download (direct) URL; fallback to view if needed
+    const gDown = id => `https://drive.google.com/uc?export=download&id=${id}`;
+    const gView = id => `https://drive.google.com/uc?export=view&id=${id}`;
 
     // Fill media when "Start Reading" is clicked
     const reading = document.getElementById('reading');
     const btn = document.getElementById('read-btn');
+
+    // helper: set src with fallback if the first returns non-image
+      function setSrcWithFallback(el, primary, fallback) {
+        el.src = primary + `&cb=${Date.now()}`;      // bust cache/SW
+        el.onerror = () => {                          // if wrapper or blocked, try other endpoint
+          el.onerror = null;
+          el.src = fallback + `&cb=${Date.now()}`;
+        };
+      }
     
     btn.addEventListener('click', (e) => {
       e.preventDefault();
     
-      // Put sources
-      if (book.media?.imageId) document.getElementById('img1').src = gView(book.media.imageId);
-      if (book.media?.gifId)   document.getElementById('gif1').src = gView(book.media.gifId);
-    
-      if (book.media?.videoId) {
-        const vid = document.getElementById('vid1');
-        vid.src = gDown(book.media.videoId); // direct stream
-        vid.load();
-        // try to play immediately (works on mobile because it's muted + user just clicked)
-        const tryPlay = vid.play();
-        if (tryPlay && typeof tryPlay.catch === 'function') {
-          tryPlay.catch(() => {/* ignore autoplay block; controls are visible anyway */});
-        }
+      // images/gifs → prefer direct download; fallback to view
+      if (book.media?.imageId) {
+        setSrcWithFallback(
+          document.getElementById('img1'),
+          gDown(book.media.imageId),
+          gView(book.media.imageId)
+        );
+      }
+      if (book.media?.gifId) {
+        setSrcWithFallback(
+          document.getElementById('gif1'),
+          gDown(book.media.gifId),
+          gView(book.media.gifId)
+        );
       }
     
-      // Reveal section
+      // video → use direct download for streaming
+      if (book.media?.videoId) {
+        const vid = document.getElementById('vid1');
+        vid.src = gDown(book.media.videoId) + `&cb=${Date.now()}`;
+        vid.load();
+        const p = vid.play();
+        if (p && p.catch) p.catch(()=>{ /* ignore if browser delays autoplay */ });
+      }
+    
       reading.style.display = 'block';
-      // Optional: scroll into view smoothly
       reading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+  });
 
 
   </script>
