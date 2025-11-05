@@ -210,18 +210,17 @@
           "When tides turn and memories surface, a courier must decide which truth is worth delivering."
         ],
         media: {
-          imageId: "1AAAABBBBCCCCDDDDEEEEFFFF11112222", // replace with your own
-          videoId: "1FFFFEEEEDDDDCCCCBBBBAAAA33334444", // 8s mp4 on Drive
-          gifId:   "1ZZZZYYYYXXXXWWWWVVVVUUUU55556666"  // .gif on Drive
+          imageId: "1PUOVfAFzdSy_1Jz-DxVfcjDpu-ReRLda", // replace with your own
+          videoId: "$1Ly_Fda49xzT5LIhfHPQxHAHERydPTm7y", // 8s mp4 on Drive
+          gifId:   "1tFAMcg9MQEoGC8803_eXz8JDQiSHUALY"  // .gif on Drive
         }
       }
     };
 
     // Build direct file URLs from Google Drive IDs
-    const gView = id => `https://drive.google.com/uc?export=view&id=$1PUOVfAFzdSy_1Jz-DxVfcjDpu-ReRLda`;       // images
-    // const gView = id => `https://drive.google.com/uc?export=view&id=$1tFAMcg9MQEoGC8803_eXz8JDQiSHUALY`;       // gifs
-    const gDown = id => `https://drive.google.com/uc?export=download&id=$1Ly_Fda49xzT5LIhfHPQxHAHERydPTm7y`;   // good for <video src>
-    
+    const gView = id => `https://drive.google.com/uc?export=view&id=${id}`;       // good for images/gifs
+    const gDown = id => `https://drive.google.com/uc?export=download&id=${id}`;   // good for <video src>
+
     // Fill media when "Start Reading" is clicked
     const reading = document.getElementById('reading');
     const btn = document.getElementById('read-btn');
