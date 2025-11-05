@@ -118,4 +118,62 @@
   </main>
 
   <script>
-    // Very small client-side router usi
+    // Very small client-side router using the ?b= slug from index.html links
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('b') || 'river-of-stars';
+
+    // Temporary data (we’ll move to JSON next)
+    const BOOKS = {
+      "river-of-stars": {
+        title: "River of Stars",
+        author: "A. K. Farhan",
+        year: "2025",
+        image: "https://picsum.photos/1200/675?random=11",
+        desc: [
+          "A night-crossing over a silent city where the river remembers every secret.",
+          "When tides turn and memories surface, a courier must decide which truth is worth delivering."
+        ]
+      },
+      "glass-garden": {
+        title: "The Glass Garden",
+        author: "M. Dahlia",
+        year: "2024",
+        image: "https://picsum.photos/1200/675?random=22",
+        desc: [
+          "Inside a walled sanctuary, plants whisper in dreams. Not all stories they tell are true.",
+          "A quiet caretaker uncovers a plot rooted far deeper than soil."
+        ]
+      },
+      "clockwork-sea": {
+        title: "The Clockwork Sea",
+        author: "J. Rahman",
+        year: "2026",
+        image: "https://picsum.photos/1200/675?random=33",
+        desc: [
+          "Sailors chase a mechanical tide that rewinds time with every storm.",
+          "To escape the loop, the crew must break an oath older than the ocean."
+        ]
+      }
+    };
+
+    const book = BOOKS[slug] || BOOKS["river-of-stars"];
+
+    // Fill the layout
+    document.getElementById('book-title').textContent = book.title;
+    document.getElementById('book-author').textContent = book.author;
+    document.getElementById('book-date').textContent = book.year;
+    document.getElementById('book-image').src = book.image;
+
+    const descEl = document.getElementById('book-desc');
+    descEl.innerHTML = book.desc.map(p => `<p>${p}</p>`).join('');
+
+    // Link to the future chapter reader (we’ll build this next)
+    document.getElementById('read-btn').href = `/novel-pwa/reader.html?b=${encodeURIComponent(slug)}&c=1`;
+
+    // Keep PWA SW registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+    }
+  </script>
+</body>
+</html>
